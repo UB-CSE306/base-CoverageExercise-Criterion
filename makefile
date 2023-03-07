@@ -2,29 +2,30 @@
 OS := $(shell uname -s)
 
 ifeq ($(OS), Darwin) 
-  CUNIT_PATH_PREFIX = /usr/local/Cellar/cunit/2.1-3/
-  CUNIT_DIRECTORY = cunit
+  INCLUDE_PATH := /opt/homebrew/Cellar/criterion/2.4.1_1/include
+  LIB_PATH := /opt/homebrew/Cellar/criterion/2.4.1_1/lib
+  CC = gcc-12
 endif
 ifeq ($(OS), Linux) 
-  CUNIT_PATH_PREFIX = /util/CUnit/
-  CUNIT_DIRECTORY = CUnit/
+  INCLUDE_PATH := /util/criterion/include
+  LIB_PATH := /util/criterion/lib/x86_64-linux-gnu
+  CC = gcc
 endif
 
-OBJECTS = schemeValidator.o 
-EXECUTABLE = tests
-
-CC = gcc
 CFLAGS = -g -Wall -O0 -fprofile-arcs -ftest-coverage -std=c11
 
-schemeValidator.o: schemeValidator.c
+schemeValidator.o: schemeValidator.c schemeValidator.h
 	$(CC) $(CFLAGS) -c schemeValidator.c
 
-tests: $(OBJECTS) schemeValidatorTests.c
-	$(CC) $(CFLAGS) -L $(CUNIT_PATH_PREFIX)lib  -I $(CUNIT_PATH_PREFIX)include/$(CUNIT_DIRECTORY) $(OBJECTS) schemeValidatorTests.c -o $(EXECUTABLE) -lcunit -lgcov 
+tests.o: tests.c schemeValidator.h 
+	$(CC) $(CFLAGS) -c -I $(INCLUDE_PATH) tests.c
+
+tests:  schemeValidator.o tests.o
+	$(CC) $(DEBUG) $(CFLAGS) -L $(LIB_PATH) -I $(INCLUDE_PATH) -o tests schemeValidator.o tests.o -lcriterion -lgcov
 
 .PHONY: clean info
 clean:
-	rm -rf *~ *.o $(EXECUTABLE) *.xml *.gc?? *.dSYM 
+	rm -rf tests *~ *.o *.xml *.gc?? *.dSYM 
 
 info:
 	@echo "User-targets:"
