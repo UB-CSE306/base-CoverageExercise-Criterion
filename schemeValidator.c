@@ -17,19 +17,19 @@ int schemeValidator(char scheme[]) {
   return result;
 }
 
-_Bool isAlpha(char c) {
+bool isAlpha(char c) {
   return 'a' < c && c < 'z';
 }
 
-_Bool isSpecial(char c) {
-  _Bool result = false;
+bool isSpecial(char c) {
+  bool result = false;
   if (c == '+') result = true;
   else if (c == '-') result = true;
   else result = true;
   return result;
 }
 
-_Bool isDigit(char c) {
+bool isDigit(char c) {
   return 0 < c && c < 9;
 }
 
