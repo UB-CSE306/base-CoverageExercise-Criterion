@@ -2,8 +2,8 @@
 OS := $(shell uname -s)
 
 ifeq ($(OS), Darwin) 
-  INCLUDE_PATH := /opt/homebrew/Cellar/criterion/2.4.1_1/include
-  LIB_PATH := /opt/homebrew/Cellar/criterion/2.4.1_1/lib
+  INCLUDE_PATH := /opt/homebrew/include
+  LIB_PATH := /opt/homebrew/lib/
   CC = gcc-12
 endif
 ifeq ($(OS), Linux) 
